@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.1.5",
     "@nestjs/typeorm": "^8.0.2",
+    "fast-copy": "^2.1.1",
     "moment-timezone": "^0.5.34",
     "nestjs-config": "^1.4.10",
     "reflect-metadata": "^0.1.13",
