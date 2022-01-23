@@ -14,7 +14,7 @@ import { LoggerModule, TypeOrmExceptionFilter } from '../common';
       imports: [ConfigModule],
       useClass: OrmConfigService, // DB접속정보가 담긴 class를 인스턴스화 하여 createTypeOrmOptions()를 호출하여 옵션을 적용
       inject: [ConfigService],
-    }),
+    }), 
     LoggerModule,
   ],
   providers: [
