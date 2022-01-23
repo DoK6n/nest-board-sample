@@ -41,7 +41,6 @@ export class UsersService {
 
       userDetail['id'] = id;
       userDetail['insertId'] = uid;
-      userDetail['updateId'] = uid;
 
       await userDetailRepo.createUserDetail(userDetail);
 
@@ -55,6 +54,32 @@ export class UsersService {
     } finally {
       // 수동으로 생성된 queryRunner 해제
       await queryRunner.release();
+    }
+  }
+
+  // 특정 id로 user 조회
+  async findUser(id: number, tz: string) {
+    const userInfo = await this.userRepository.findUser(tz, { id });
+    const userDetailInfo = await this.userDetailRepository.findUserDetail(tz, { id });
+    if (userInfo.length !== 0) {
+      const result = userInfo[0];
+      if (userDetailInfo.length !== 0) result.detail = userDetailInfo[0];
+      return result;
+    } else {
+      return {};
+    }
+  }
+
+  // header의 uid로 내 user 조회
+  async findMyUser(uid: string, tz: string) {
+    const userInfo = await this.userRepository.findUser(tz, { uid });
+    const userDetailInfo = await this.userDetailRepository.findUserDetail(tz, { uid });
+    if (userInfo.length !== 0) {
+      const result = userInfo[0];
+      if (userDetailInfo.length !== 0) result.detail = userDetailInfo[0];
+      return result;
+    } else {
+      return {};
     }
   }
 }
