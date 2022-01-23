@@ -1,6 +1,6 @@
 import { Module, Controller } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from 'common/interceptors';
 import { HttpExceptionFilter, LoggerModule } from './common';
 import { DatabaseModule } from './database/database.module';
@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { BoardsModule } from './boards/boards.module';
 import { AppController } from 'app.controller';
 import { AppService } from 'app.service';
+import { ApplicationAuthGuard } from 'auth';
 
 @Module({
   imports: [
@@ -21,6 +22,10 @@ import { AppService } from 'app.service';
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ApplicationAuthGuard,
+    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
