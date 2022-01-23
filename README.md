@@ -2,29 +2,11 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+NestJS CRUD Sample
+
+- use Typeorm RowQuery Version
 
 ## Installation
 
@@ -45,6 +27,20 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Typeorm synchronize Option
+
+Entity를 기준으로 DB Table을 새로 생성하는 옵션이므로 서버 처음 실행 시만 true
+
+- Path: `src/config/orm/ormconfig.ts`
+
+## typeorm-model-generator
+
+기존 DB로부터 모델을 자동으로 생성
+
+```bash
+$ typeorm-model-generator -h <host> -d <DB이름> -p [port] -u <user> -x [password] -e [engine] -o ./entities
+```
+
 ## Test
 
 ```bash
@@ -58,16 +54,31 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Commit Convention
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `@commitlint/config-conventional`
 
-## Stay in touch
+```
+build: 빌드 시스템 또는 외부 종속성에 영향을 미치는 변경 사항이 있을 때
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+chore: 빌드 업무 수정, 패키지 매니저 수정
 
-## License
+ci: CI 구성 파일 및 스크립트의 변경 사항이 있을 때
 
-Nest is [MIT licensed](LICENSE).
+docs: 단순 문서 수정이 있을 때
+
+feat: 새로운 기능 추가가 있을 때
+
+fix: 버그 수정이 있을 때
+
+perf: 성능 개선이 있는 변경이 있을 때
+
+refactor: 버그 수정, 기능 추가, 성능 개선을 제외한 변경이 있을 때
+
+revert: 이전 커밋으로 회귀할 때
+
+style: 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우
+
+test: 테스트 관련 변경이 있을 때
+
+```
