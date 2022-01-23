@@ -1,5 +1,60 @@
+import { UserRepository, UserDetailRepository } from './repositories';
 import { Injectable } from '@nestjs/common';
+import { LoggerService } from 'common';
+import copy from 'fast-copy'; // 객체 깊은 복사 라이브러리
+import { Connection } from 'typeorm';
+import { CreateUserInfoRequestDto } from './dto';
+import { v1 as uuidv1 } from 'uuid';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    private readonly connection: Connection,
+    private readonly userRepository: UserRepository,
+    private readonly userDetailRepository: UserDetailRepository,
+    private readonly logger: LoggerService,
+  ) {}
+
+  async createUser(createUserInfo: CreateUserInfoRequestDto) {
+    // queryRunner는 commit, rollback, release의 transaction 상태를 수동으로 제어가능
+    // typeorm-transactional-cls-hooked, connection.manager.transaction, transaction decorator등 다양한 방법이 존재
+    const queryRunner = await this.connection.createQueryRunner();
+
+    await queryRunner.startTransaction();
+    try {
+      // transaction내에서 처리할 Custom Repository
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
+      const userDetailRepo = queryRunner.manager.getCustomRepository(UserDetailRepository);
+
+      const user = copy(createUserInfo);
+      delete user.description;
+      const uid = uuidv1();
+
+      const userDetail = copy(createUserInfo);
+      delete userDetail.age;
+      delete userDetail.name;
+
+      user['insertId'] = uid;
+
+      // 삽입시 return type인 InsertResult는 generatedMaps, identifiers, raw 객체를 반환하므로 삽입된 id값을 얻을 수 있음
+      const id: number = (await userRepo.createUser(user)).identifiers[0].id;
+
+      userDetail['id'] = id;
+      userDetail['insertId'] = uid;
+      userDetail['updateId'] = uid;
+
+      await userDetailRepo.createUserDetail(userDetail);
+
+      // commit transaction
+      await queryRunner.commitTransaction();
+      return { status: 'success', message: 'user & detail 생성 성공', id: id };
+    } catch (error) {
+      // 에러로 인해 변경사항을 롤백
+      await queryRunner.rollbackTransaction();
+      return { status: 'error', message: error.message };
+    } finally {
+      // 수동으로 생성된 queryRunner 해제
+      await queryRunner.release();
+    }
+  }
 }

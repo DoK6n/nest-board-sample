@@ -9,6 +9,7 @@ import { BoardsModule } from './boards/boards.module';
 import { AppController } from 'app.controller';
 import { AppService } from 'app.service';
 import { ApplicationAuthGuard } from 'auth';
+import { Connection } from 'typeorm';
 
 @Module({
   imports: [
@@ -36,4 +37,6 @@ import { ApplicationAuthGuard } from 'auth';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly connection: Connection) {}
+}
