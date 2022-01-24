@@ -11,7 +11,7 @@ import { UserParamValidationPipe } from './pipes';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiOperation({ summary: 'User 및 Detail 생성', description: '새 User을 생성합니다' })
+  @ApiOperation({ summary: '신규 유저 생성', description: '신규 유저 생성합니다' })
   @ApiOkResponse({ type: CreateUserInfoResponseDto })
   @Post('/create')
   async addUser(@Body() dto: CreateUserInfoRequestDto): Promise<CreateUserInfoResponseDto> {
@@ -19,7 +19,7 @@ export class UsersController {
   }
 
   // @UseGuards(UidGuard)
-  @ApiOperation({ summary: '특정 User & Detail 조회', description: '특정 유저 정보를 조회합니다' })
+  @ApiOperation({ summary: '특정 유저 정보 조회', description: '특정 유저 정보를 조회합니다' })
   @ApiSecurity({ timezone: [], uid: [] })
   @ApiParam({
     name: 'id',
@@ -29,22 +29,22 @@ export class UsersController {
   })
   @ApiOkResponse({ description: '조회성공', type: UserInfoResponseDto })
   @Get('/find/:id')
-  async retrieveSample(
+  async retrieveUserInfo(
     @Param('id', UserParamValidationPipe) id: number,
     @ClientTimezone() tz: string,
   ): Promise<UserInfoResponseDto> {
-    return this.usersService.findUser(id, tz);
+    return this.usersService.findUserInfo(id, tz);
   }
 
   @UseGuards(UidGuard)
-  @ApiOperation({ summary: '내 User & Detail 조회', description: '내 정보를 조회합니다' })
+  @ApiOperation({ summary: '내 정보 조회', description: '내 정보를 조회합니다' })
   @ApiSecurity({ timezone: [], uid: [] })
   @ApiOkResponse({ description: '조회성공', type: UserInfoResponseDto })
   @Get('/find')
-  async retrieveMySample(
+  async retrieveMyInfo(
     @ClientTimezone() tz: string,
     @UserUid() uid: string,
   ): Promise<UserInfoResponseDto> {
-    return this.usersService.findMyUser(uid, tz);
+    return this.usersService.findMyInfo(uid, tz);
   }
 }

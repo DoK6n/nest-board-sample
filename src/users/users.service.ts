@@ -58,7 +58,7 @@ export class UsersService {
   }
 
   // 특정 id로 user 조회
-  async findUser(id: number, tz: string) {
+  async findUserInfo(id: number, tz: string) {
     const userInfo = await this.userRepository.findUser(tz, { id });
     const userDetailInfo = await this.userDetailRepository.findUserDetail(tz, { id });
     if (userInfo.length !== 0) {
@@ -71,7 +71,7 @@ export class UsersService {
   }
 
   // header의 uid로 내 user 조회
-  async findMyUser(uid: string, tz: string) {
+  async findMyInfo(uid: string, tz: string) {
     const userInfo = await this.userRepository.findUser(tz, { uid });
     const userDetailInfo = await this.userDetailRepository.findUserDetail(tz, { uid });
     if (userInfo.length !== 0) {
