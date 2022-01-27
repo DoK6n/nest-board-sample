@@ -55,4 +55,9 @@ export class BoardRepository extends Repository<Board> {
 
     return await this.query(statement, values);
   }
+
+  async deleteBoard(id: number) {
+    let statement = `DELETE FROM user_board WHERE ID = ?`;
+    return await this.query(statement, [id]);
+  }
 }

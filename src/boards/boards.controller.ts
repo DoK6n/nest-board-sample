@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param, Patch, Delete } from '@nestjs/common';
 import { ApiOperation, ApiSecurity, ApiBody, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { UidGuard } from 'auth';
 import { ClientTimezone } from 'common';
@@ -7,6 +7,7 @@ import { BoardsService } from './boards.service';
 import {
   CreateBoardRequestDto,
   CreateBoardResponseDto,
+  DeleteBoardResponseDto,
   FindBoardResponseDto,
   FindBoardsListResponseDto,
   UpdateBoardRequestDto,
@@ -82,5 +83,21 @@ export class BoardsController {
     @Body() dto: UpdateBoardRequestDto,
   ): Promise<UpdateBoardResponseDto> {
     return this.boardsService.updateBoard(id, dto, uid);
+  }
+
+  @UseGuards(UidGuard)
+  @ApiOperation({ summary: '특정 게시글 삭제', description: '특정 게시글을 삭제합니다.' })
+  @ApiSecurity({ timezone: [], uid: [] })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 1
+  })
+  @ApiOkResponse({ type: DeleteBoardResponseDto })
+  @Delete('/delete/:id')
+  async removeBoard(
+    @Param('id') id: number,
+  ): Promise<DeleteBoardResponseDto> {
+    return this.boardsService.deleteBoard(id);
   }
 }

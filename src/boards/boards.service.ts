@@ -35,4 +35,13 @@ export class BoardsService {
     const response = { status: 'success', message: `게시글 수정 성공`, data: { boardNum: id } };
     return response;
   }
+
+  async deleteBoard(id: number) {
+    const deleteRows = (await this.boardRepository.deleteBoard(id)).affectedRows;
+    if (deleteRows >= 1) {
+      return { status: 'success', message: '게시글 삭제 성공', data: { boardNum: id } };
+    } else {
+      return { status: 'fail', message: '존재하지 않는 게시글입니다.', data: { boardNum: id } };
+    }
+  }
 }
