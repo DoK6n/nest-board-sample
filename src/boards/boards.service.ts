@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'users/repositories';
-import { CreateBoardRequestDto, CreateBoardResponseDto } from './dto';
+import { CreateBoardRequestDto, CreateBoardResponseDto, UpdateBoardRequestDto } from './dto';
 import { BoardRepository } from './repositories';
 
 @Injectable()
@@ -28,5 +28,11 @@ export class BoardsService {
 
   async findBoard(id: number, tz: string) {
     return await this.boardRepository.findBoardByIdOrPage(tz, { id });
+  }
+
+  async updateBoard(id: number, dto: UpdateBoardRequestDto, uid: string) {
+    await this.boardRepository.updateBoardById(id, dto, uid);
+    const response = { status: 'success', message: `게시글 수정 성공`, data: { boardNum: id } };
+    return response;
   }
 }

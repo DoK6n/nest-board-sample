@@ -1,5 +1,6 @@
-import { CreateBoardRequestDto } from 'boards/dto';
+import { CreateBoardRequestDto, UpdateBoardRequestDto } from 'boards/dto';
 import { Board } from 'boards/entities';
+import { camel2snake } from 'common';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Board)
@@ -35,5 +36,23 @@ export class BoardRepository extends Repository<Board> {
 
       return await this.query(statement, [id]);
     }
+  }
+
+  async updateBoardById(id: number, board: UpdateBoardRequestDto, uid: string) {
+    let statement = `UPDATE user_board UB SET `;
+
+    if (Object.keys(board).length !== 0) {
+      statement +=
+        Object.keys(board)
+          .map(col => `UB.${camel2snake(col)} = ?`)
+          .join(', ') + ', ';
+    }
+    statement += `UB.UPDATE_ID = ?, UB.UPDATE_DT = NOW() WHERE UB.ID = ?`;
+
+    const values = Object.values(board);
+    values.push(uid);
+    values.push(id);
+
+    return await this.query(statement, values);
   }
 }
