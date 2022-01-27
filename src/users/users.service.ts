@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { LoggerService } from 'common';
 import copy from 'fast-copy'; // 객체 깊은 복사 라이브러리
 import { Connection } from 'typeorm';
-import { CreateUserInfoRequestDto } from './dto';
+import { CreateUserInfoRequestDto, UpdateUserInfoRequestDto } from './dto';
 import { v1 as uuidv1 } from 'uuid';
 
 @Injectable()
@@ -80,6 +80,35 @@ export class UsersService {
       return result;
     } else {
       return {};
+    }
+  }
+
+  // 유저 정보 수정
+  async updateUserInfo(id: number, uid: string, userInfo: UpdateUserInfoRequestDto) {
+    const queryRunner = await this.connection.createQueryRunner();
+
+    await queryRunner.startTransaction();
+    try {
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
+      const userDetailRepo = queryRunner.manager.getCustomRepository(UserDetailRepository);
+
+      const user = copy(userInfo);
+      delete user.description;
+
+      const userDetail = copy(userInfo);
+      delete userDetail.age;
+      delete userDetail.name;
+
+      await userRepo.updateUser(id, uid, user);
+      await userDetailRepo.updateUserDetail(id, uid, userDetail);
+
+      await queryRunner.commitTransaction();
+      return { status: 'success', message: '내 정보 수정 성공' };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      return { status: 'error', message: error.message };
+    } finally {
+      await queryRunner.release();
     }
   }
 }

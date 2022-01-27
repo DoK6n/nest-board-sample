@@ -1,4 +1,6 @@
+import { camel2snake } from 'common';
 import { EntityRepository, Repository } from 'typeorm';
+import { UpdateUserInfoRequestDto } from 'users/dto';
 import { User } from '../entities';
 
 // Repository 패턴을 이용해 DB와 연동
@@ -36,5 +38,22 @@ export class UserRepository extends Repository<User> {
       statement += `INSERT_ID = ?`;
       return await this.query(statement, [uid]);
     }
+  }
+
+  // user 데이터 수정
+  // Omit<T, P> T에서 Property P를 제거한 Type을 구성
+  async updateUser(id: number, uid: string, user: Omit<UpdateUserInfoRequestDto, 'discription'>) {
+    let statement = `UPDATE user U SET `;
+
+    if (Object.keys(user).length !== 0) {
+      statement += Object.keys(user).map(col => `U.${camel2snake(col)} = ?`).join(', ') + ', ';
+    }
+    statement += `U.UPDATE_ID = ?, U.UPDATE_DT = NOW() WHERE U.ID = ?`;
+
+    const values = Object.values(user);
+    values.push(uid);
+    values.push(id);
+
+    return await this.query(statement, values);
   }
 }

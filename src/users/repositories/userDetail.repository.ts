@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { UpdateUserInfoRequestDto } from 'users/dto';
 import { UserDetail } from '../entities';
 
 // Repository 패턴을 이용해 DB와 연동
@@ -31,6 +32,19 @@ export class UserDetailRepository extends Repository<UserDetail> {
     } else if (uid) {
       statement += `INSERT_ID = ?`;
       return await this.query(statement, [uid]);
+    }
+  }
+
+  // userDetail 데이터 수정
+  async updateUserDetail(
+    id: number,
+    uid: string,
+    userDetail: Omit<UpdateUserInfoRequestDto, 'name' | 'age'>,
+  ) {
+    if (userDetail.description) {
+      const { description } = userDetail;
+      const statement = `UPDATE user_detail UD SET UD.DESCRIPTION = ?, UD.UPDATE_ID = ?, UD.UPDATE_DT = NOW() WHERE UD.ID = ?`;
+      return await this.query(statement, [description, uid, id]);
     }
   }
 }

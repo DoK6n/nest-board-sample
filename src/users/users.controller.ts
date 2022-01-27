@@ -1,9 +1,9 @@
-import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiSecurity } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiSecurity } from '@nestjs/swagger';
 import { ClientTimezone } from 'common/decorators';
 import { UidGuard } from 'auth/guards';
-import { CreateUserInfoRequestDto, CreateUserInfoResponseDto, UserInfoResponseDto } from './dto';
+import { CreateUserInfoRequestDto, CreateUserInfoResponseDto, UpdateUserInfoRequestDto, UpdateUserInfoResponseDto, UserInfoResponseDto } from './dto';
 import { UserUid } from './decorators';
 import { UserParamValidationPipe } from './pipes';
 
@@ -46,5 +46,25 @@ export class UsersController {
     @UserUid() uid: string,
   ): Promise<UserInfoResponseDto> {
     return this.usersService.findMyInfo(uid, tz);
+  }
+
+  @UseGuards(UidGuard)
+  @ApiOperation({ summary: '내 정보 수정', description: '내 정보를 수정합니다.' })
+  @ApiBody({ type: UpdateUserInfoRequestDto })
+  @ApiSecurity({ timezone: [], uid: [] })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    required: true,
+    example: 1
+  })
+  @ApiOkResponse({ description: '수정성공', type: UpdateUserInfoResponseDto })
+  @Patch('/update/:id')
+  async editUserInfo(
+    @Param('id', UserParamValidationPipe) id: number,
+    @UserUid() uid: string,
+    @Body() dto: UpdateUserInfoRequestDto
+  ): Promise<UpdateUserInfoResponseDto> {
+    return this.usersService.updateUserInfo(id, uid, dto);
   }
 }

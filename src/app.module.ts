@@ -1,8 +1,7 @@
 import { Module, Controller } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from 'common/interceptors';
-import { HttpExceptionFilter, LoggerModule } from './common';
+import { HttpExceptionFilter, LoggerModule, LoggingInterceptor } from 'common';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { BoardsModule } from './boards/boards.module';
