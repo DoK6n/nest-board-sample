@@ -47,4 +47,10 @@ export class UserDetailRepository extends Repository<UserDetail> {
       return await this.query(statement, [description, uid, id]);
     }
   }
+
+  // userDetail 데이터 삭제
+  async deleteUserDetail(id: number) {
+    const statement = `DELETE FROM user_detail WHERE ID = ?`;
+    return await this.query(statement, [id]);
+  }
 }

@@ -46,7 +46,10 @@ export class UserRepository extends Repository<User> {
     let statement = `UPDATE user U SET `;
 
     if (Object.keys(user).length !== 0) {
-      statement += Object.keys(user).map(col => `U.${camel2snake(col)} = ?`).join(', ') + ', ';
+      statement +=
+        Object.keys(user)
+          .map(col => `U.${camel2snake(col)} = ?`)
+          .join(', ') + ', ';
     }
     statement += `U.UPDATE_ID = ?, U.UPDATE_DT = NOW() WHERE U.ID = ?`;
 
@@ -55,5 +58,11 @@ export class UserRepository extends Repository<User> {
     values.push(id);
 
     return await this.query(statement, values);
+  }
+
+  // user 데이터 삭제
+  async deleteUser(id: number) {
+    const statement = `DELETE FROM user WHERE ID = ?`;
+    return await this.query(statement, [id]);
   }
 }

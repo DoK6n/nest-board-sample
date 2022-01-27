@@ -1,5 +1,5 @@
 import { UserRepository, UserDetailRepository } from './repositories';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { LoggerService } from 'common';
 import copy from 'fast-copy'; // 객체 깊은 복사 라이브러리
 import { Connection } from 'typeorm';
@@ -104,6 +104,33 @@ export class UsersService {
 
       await queryRunner.commitTransaction();
       return { status: 'success', message: '내 정보 수정 성공' };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      return { status: 'error', message: error.message };
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async deleteUser(uid: string) {
+    const queryRunner = await this.connection.createQueryRunner();
+
+    await queryRunner.startTransaction();
+    try {
+      const userDetailRepo = queryRunner.manager.getCustomRepository(UserDetailRepository);
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
+
+      let id = await userRepo.findUserIdByInsertId(uid);
+      if (id.length === 0) {
+        throw new NotFoundException(`삭제할 유저가 없습니다.`);
+      } else {
+        id = id[0].ID;
+        await userDetailRepo.deleteUserDetail(id);
+        await userRepo.deleteUser(id);
+
+        await queryRunner.commitTransaction();
+        return { status: 'success', message: '내 정보 삭제 성공' };
+      }
     } catch (error) {
       await queryRunner.rollbackTransaction();
       return { status: 'error', message: error.message };

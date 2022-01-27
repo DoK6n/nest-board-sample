@@ -1,9 +1,16 @@
-import { Controller, Post, Body, UseGuards, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param, Patch, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiSecurity } from '@nestjs/swagger';
 import { ClientTimezone } from 'common/decorators';
 import { UidGuard } from 'auth/guards';
-import { CreateUserInfoRequestDto, CreateUserInfoResponseDto, UpdateUserInfoRequestDto, UpdateUserInfoResponseDto, UserInfoResponseDto } from './dto';
+import {
+  CreateUserInfoRequestDto,
+  CreateUserInfoResponseDto,
+  DeleteUserInfoResponseDto,
+  UpdateUserInfoRequestDto,
+  UpdateUserInfoResponseDto,
+  UserInfoResponseDto,
+} from './dto';
 import { UserUid } from './decorators';
 import { UserParamValidationPipe } from './pipes';
 
@@ -56,15 +63,24 @@ export class UsersController {
     name: 'id',
     type: 'number',
     required: true,
-    example: 1
+    example: 1,
   })
   @ApiOkResponse({ description: '수정성공', type: UpdateUserInfoResponseDto })
   @Patch('/update/:id')
   async editUserInfo(
     @Param('id', UserParamValidationPipe) id: number,
     @UserUid() uid: string,
-    @Body() dto: UpdateUserInfoRequestDto
+    @Body() dto: UpdateUserInfoRequestDto,
   ): Promise<UpdateUserInfoResponseDto> {
     return this.usersService.updateUserInfo(id, uid, dto);
+  }
+
+  @UseGuards(UidGuard)
+  @ApiOperation({ summary: '내 정보 삭제', description: '내 정보 삭제합니다.' })
+  @ApiSecurity({ timezone: [], uid: [] })
+  @ApiOkResponse({ description: '삭제성공', type: DeleteUserInfoResponseDto })
+  @Delete('/delete/:id')
+  async removeUser(@UserUid() uid: string): Promise<DeleteUserInfoResponseDto> {
+    return this.usersService.deleteUser(uid);
   }
 }
