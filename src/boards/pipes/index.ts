@@ -1,0 +1,1 @@
+export { BoardParamValidationPipe } from './board-param-validation.pipe';

@@ -7,7 +7,7 @@ class DetailResponseDto {
   readonly description: string;
 
   @IsString()
-  @ApiProperty({ example: '123456ab-78cd-9e0f-gg8h-7654i3210j1k', description: 'uuid' })
+  @ApiProperty({ example: 'c5022070-7c33-11ec-b3e9-55576f1317c0', description: 'uuid' })
   readonly insertId: string;
 
   @IsString()
@@ -15,7 +15,7 @@ class DetailResponseDto {
   readonly insertDt: string;
 
   @IsString()
-  @ApiProperty({ example: '123456ab-78cd-9e0f-gg8h-7654i3210j1k', description: '수정한 uuid' })
+  @ApiProperty({ example: 'c5022070-7c33-11ec-b3e9-55576f1317c0', description: '수정한 uuid' })
   readonly updateId: string;
 
   @IsString()
@@ -35,7 +35,7 @@ export class UserInfoResponseDto {
   readonly age: number;
 
   @IsString()
-  @ApiProperty({ example: '123456ab-78cd-9e0f-gg8h-7654i3210j1k', description: 'uuid' })
+  @ApiProperty({ example: 'c5022070-7c33-11ec-b3e9-55576f1317c0', description: 'uuid' })
   readonly insertId: string;
 
   @IsString()
@@ -43,7 +43,7 @@ export class UserInfoResponseDto {
   readonly insertDt: string;
 
   @IsString()
-  @ApiProperty({ example: '123456ab-78cd-9e0f-gg8h-7654i3210j1k', description: '수정한 uuid' })
+  @ApiProperty({ example: 'c5022070-7c33-11ec-b3e9-55576f1317c0', description: '수정한 uuid' })
   readonly updateId: string;
 
   @IsString()

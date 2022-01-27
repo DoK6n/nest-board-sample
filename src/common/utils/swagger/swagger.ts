@@ -19,7 +19,7 @@ export function setupSwagger(app: NestExpressApplication) {
     .addApiKey(
       {
         type: 'apiKey',
-        description: 'Example: 123456ab-78cd-9e0f-gg8h-7654i3210j1k',
+        description: 'Example: c5022070-7c33-11ec-b3e9-55576f1317c0',
         name: 'uid',
         in: 'header',
       },

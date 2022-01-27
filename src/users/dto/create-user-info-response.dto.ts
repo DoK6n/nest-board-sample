@@ -7,7 +7,7 @@ export class CreateUserInfoResponseDto {
   status: string;
   
   @IsString()
-  @ApiProperty({ example: 'user & detail 생성 성공'})
+  @ApiProperty({ example: '유저 생성 성공'})
   message: string;
 
 

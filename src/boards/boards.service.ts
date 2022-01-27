@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'users/repositories';
-import { CreateBoardRequestDto } from './dto';
+import { CreateBoardRequestDto, CreateBoardResponseDto } from './dto';
 import { BoardRepository } from './repositories';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class BoardsService {
     private readonly boardRepository: BoardRepository,
   ) {}
 
-  async createBoard(board: CreateBoardRequestDto, uid: string) {
+  async createBoard(board: CreateBoardRequestDto, uid: string): Promise<CreateBoardResponseDto> {
     const userId = (await this.userRepository.findUserIdByInsertId(uid))[0].ID;
     const createdBoardId = await this.boardRepository.createBoard(board, userId, uid);
     // FIXME Interceptor로 response mapping 필요
@@ -20,5 +20,13 @@ export class BoardsService {
       data: { writer: userId, boardNum: createdBoardId.insertId },
     };
     return response;
+  }
+
+  async findBoardsList(page: number, tz: string) {
+    return await this.boardRepository.findBoardByIdOrPage(tz, { page });
+  }
+
+  async findBoard(id: number, tz: string) {
+    return await this.boardRepository.findBoardByIdOrPage(tz, { id });
   }
 }
