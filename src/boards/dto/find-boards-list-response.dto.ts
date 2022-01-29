@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
-class Data {
+export class FindBoardsListResponseDto {
   @IsNumber()
   @ApiProperty({ example: 1, description: '글번호' })
   readonly id: number;
@@ -30,12 +29,4 @@ class Data {
   @IsString()
   @ApiProperty({ example: '2021-11-17T12:18:27.000Z', description: '수정일자' })
   readonly updateDt: string;
-}
-
-export class FindBoardsListResponseDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Data)
-  @ApiProperty({ type: () => Data })
-  datas: Data[];
 }

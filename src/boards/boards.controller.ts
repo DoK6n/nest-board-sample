@@ -42,12 +42,12 @@ export class BoardsController {
     required: true,
     example: 1,
   })
-  @ApiOkResponse({ type: FindBoardsListResponseDto })
+  @ApiOkResponse({ type: [FindBoardsListResponseDto] })
   @Get('/find/list/:page')
   async retrieveBoardsList(
     @ClientTimezone() tz: string,
     @Param('page', BoardParamValidationPipe) page: number,
-  ): Promise<FindBoardsListResponseDto> {
+  ): Promise<[FindBoardsListResponseDto]> {
     return this.boardsService.findBoardsList(page, tz);
   }
 
@@ -91,13 +91,11 @@ export class BoardsController {
   @ApiParam({
     name: 'id',
     required: true,
-    example: 1
+    example: 1,
   })
   @ApiOkResponse({ type: DeleteBoardResponseDto })
   @Delete('/delete/:id')
-  async removeBoard(
-    @Param('id') id: number,
-  ): Promise<DeleteBoardResponseDto> {
+  async removeBoard(@Param('id') id: number): Promise<DeleteBoardResponseDto> {
     return this.boardsService.deleteBoard(id);
   }
 }
