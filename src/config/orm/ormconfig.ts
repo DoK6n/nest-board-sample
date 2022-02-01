@@ -51,14 +51,8 @@ const config: ConnectionOptions = {
   host: process.env.TYPEORM_HOST || '127.0.0.1',
   database: process.env.TYPEORM_DATABASE || 'nestjs',
   timezone: 'Z',
-  entities: path
-    .resolve(__dirname, '..', '..', '**')
-    .concat(process.env.TYPEORM_ENTITIES)
-    .split(' '), // webpack-hmr.config이용한 hot reloading시 제대로 동작 안함
-  migrations: path
-    .resolve(__dirname, '..', '..')
-    .concat(process.env.TYPEORM_MIGRATIONS_DIR)
-    .split(' '),
+  entities: path.resolve(__dirname, '..', '..').concat(process.env.TYPEORM_ENTITIES).split(' '), // webpack-hmr.config이용한 hot reloading시 제대로 동작 안함
+  migrations: path.resolve(__dirname, '..', '..').concat(process.env.TYPEORM_MIGRATIONS).split(' '),
   migrationsRun: true,
   synchronize: false, // nest와 DB를 싱크시켜서 DB에 테이블을 새로 생성시키기 때문에 데이터 유실이 될수 있음
   logging: enableTypeORMLoggingOptionsPerEnvironment(),
