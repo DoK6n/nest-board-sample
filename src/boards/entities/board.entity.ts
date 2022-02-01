@@ -28,6 +28,7 @@ export class Board {
     name: 'INSERT_DT',
     nullable: true,
     comment: '등록일시',
+    default: () => 'CURRENT_TIMESTAMP',
   })
   insertDt: Date | null;
 
