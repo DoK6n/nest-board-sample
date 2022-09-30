@@ -1,58 +1,9 @@
 <p align="center">
+  <a href="https://vitejs.dev/" target="blank"><img src="https://www.vectorlogo.zone/logos/reactjs/reactjs-ar21.svg" height="130" alt="Vite Logo" /></a>
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
 
-## Description
-
-NestJS CRUD Sample
-
-- use Typeorm RowQuery Version
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Typeorm synchronize Option
-
-Entity를 기준으로 DB Table을 새로 생성하는 옵션이므로 서버 처음 실행 시만 true
-
-- Path: `src/config/orm/ormconfig.ts`
-
-## typeorm-model-generator
-
-기존 DB로부터 모델을 자동으로 생성
-
-```bash
-$ typeorm-model-generator -h <host> -d <DB이름> -p [port] -u <user> -x [password] -e [engine] -o ./entities
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
+# NestJS-React Rest API Sample
 
 ## Commit Convention
 
