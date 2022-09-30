@@ -13,7 +13,7 @@ export class UserDetailRepository extends Repository<UserDetail> {
 
   // user Detail 조회
   async findUserDetail(timezone: string, optional?: { id?: number; uid?: string }) {
-    let statement = `
+    let statement = /*sql*/ `
     SELECT
       DESCRIPTION description,
       UD.INSERT_ID insertId,
@@ -27,10 +27,10 @@ export class UserDetailRepository extends Repository<UserDetail> {
     const { id, uid } = optional;
 
     if (id) {
-      statement += `ID = ?`;
+      statement += /*sql*/ `ID = ?`;
       return await this.query(statement, [id]);
     } else if (uid) {
-      statement += `INSERT_ID = ?`;
+      statement += /*sql*/ `INSERT_ID = ?`;
       return await this.query(statement, [uid]);
     }
   }

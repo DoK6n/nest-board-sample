@@ -13,7 +13,7 @@ export class BoardRepository extends Repository<Board> {
   async findBoardByIdOrPage(tz: string, optional: { id?: number; page?: number }) {
     const { id, page } = optional;
 
-    let statement = `
+    let statement = /*sql*/ `
     SELECT
       UB.ID id,
       UB.TITLE title,
@@ -25,14 +25,14 @@ export class BoardRepository extends Repository<Board> {
     FROM user_board UB `;
 
     if (page && !id) {
-      statement += `ORDER BY UB.ID DESC LIMIT ?, ?`;
+      statement += /*sql*/ `ORDER BY UB.ID DESC LIMIT ?, ?`;
       const MAX_PAGE_LIMIT = 5;
       const first = (page - 1) * MAX_PAGE_LIMIT;
       const last = MAX_PAGE_LIMIT;
 
       return await this.query(statement, [first, last]);
     } else if (id && !page) {
-      statement += `WHERE UB.ID = ?`;
+      statement += /*sql*/ `WHERE UB.ID = ?`;
 
       return await this.query(statement, [id]);
     }
@@ -47,7 +47,7 @@ export class BoardRepository extends Repository<Board> {
           .map(col => `UB.${camel2snake(col)} = ?`)
           .join(', ') + ', ';
     }
-    statement += `UB.UPDATE_ID = ?, UB.UPDATE_DT = NOW() WHERE UB.ID = ?`;
+    statement += /*sql*/ `UB.UPDATE_ID = ?, UB.UPDATE_DT = NOW() WHERE UB.ID = ?`;
 
     const values = Object.values(board);
     values.push(uid);

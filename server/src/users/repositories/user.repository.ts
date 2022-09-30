@@ -19,7 +19,7 @@ export class UserRepository extends Repository<User> {
   // user 조회
   async findUser(timezone: string, optional: { id?: number; uid?: string }) {
     // 매개변수 여러개를 optional로 받아옴
-    let statement = `
+    let statement = /*sql*/ `
     SELECT
       U.NAME name,
       U.AGE age,
@@ -32,10 +32,10 @@ export class UserRepository extends Repository<User> {
     const { id, uid } = optional;
 
     if (id && !uid) {
-      statement += `ID = ?`;
+      statement += /*sql*/ `ID = ?`;
       return await this.query(statement, [id]);
     } else if (uid && !id) {
-      statement += `INSERT_ID = ?`;
+      statement += /*sql*/ `INSERT_ID = ?`;
       return await this.query(statement, [uid]);
     }
   }
@@ -51,7 +51,7 @@ export class UserRepository extends Repository<User> {
           .map(col => `U.${camel2snake(col)} = ?`)
           .join(', ') + ', ';
     }
-    statement += `U.UPDATE_ID = ?, U.UPDATE_DT = NOW() WHERE U.ID = ?`;
+    statement += /*sql*/ `U.UPDATE_ID = ?, U.UPDATE_DT = NOW() WHERE U.ID = ?`;
 
     const values = Object.values(user);
     values.push(uid);
