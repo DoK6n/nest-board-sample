@@ -19,7 +19,8 @@
   "homepage": "https://github.com/DoK6n/nest-board-sample#readme",
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0"
+    "@commitlint/config-conventional": "^17.1.0",
+    "husky": "^8.0.1"
   },
   "husky": {
     "hooks": {
